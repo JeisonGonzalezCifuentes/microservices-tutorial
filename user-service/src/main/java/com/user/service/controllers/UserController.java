@@ -60,7 +60,7 @@ public class UserController {
         return ResponseEntity.ok(savedBike);
     }
 
-    @CircuitBreaker(name = "allCB", fallbackMethod = "fallBackGetVehicle")
+    @CircuitBreaker(name = "allCB", fallbackMethod = "fallBackGetAllVehicles")
     @GetMapping("/{userId}/vehicles")
     public ResponseEntity<Map<String, Object>> getUserAndVehicles(@PathVariable("userId") Integer userId){
         Map<String, Object> userAndVehicles = userService.getUserAndVehicles(userId);
@@ -96,10 +96,15 @@ public class UserController {
         return new ResponseEntity("User: " + userId + " does not have available vehicles.", HttpStatus.OK);
     }
 
-    private ResponseEntity<List<Vehicle>> fallBackSaveVehicle(@PathVariable("userId") Integer userId,
-                                                             @RequestBody Vehicle vehicle,
-                                                             RuntimeException runtimeException){
+    private ResponseEntity<Vehicle> fallBackSaveVehicle(@PathVariable("userId") Integer userId,
+                                                        @RequestBody Vehicle vehicle,
+                                                        RuntimeException runtimeException){
         return new ResponseEntity("User: " + userId + " can't buy vehicles.", HttpStatus.OK);
+    }
+
+    private ResponseEntity<Map<String, Object>> fallBackGetAllVehicles(@PathVariable("userId") Integer userId,
+                                                        RuntimeException runtimeException){
+        return new ResponseEntity("User: " + userId + " does not have available vehicles.", HttpStatus.OK);
     }
 
 }
