@@ -6,6 +6,7 @@ import com.user.service.models.Car;
 import com.user.service.models.Vehicle;
 import com.user.service.services.UserService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,15 +49,23 @@ public class UserController {
 
     @CircuitBreaker(name = "carsCB", fallbackMethod = "fallBackSaveVehicle")
     @PostMapping("/{userId}/car")
-    public ResponseEntity<Car> saveCar(@PathVariable("userId") Integer userId, @RequestBody Car car){
-        Car savedCar = userService.saveCar(userId, car);
+    public ResponseEntity<Vehicle> saveCar(@PathVariable("userId") Integer userId, @RequestBody Vehicle vehicle){
+        Car car = new Car();
+        car.setBrand(vehicle.getBrand());
+        car.setModel(vehicle.getModel());
+
+        Vehicle savedCar = userService.saveCar(userId, car);
         return ResponseEntity.ok(savedCar);
     }
 
     @CircuitBreaker(name = "bikesCB", fallbackMethod = "fallBackSaveVehicle")
     @PostMapping("/{userId}/bike")
-    public ResponseEntity<Bike> saveBike(@PathVariable("userId") Integer userId, @RequestBody Bike bike){
-        Bike savedBike = userService.saveBike(userId, bike);
+    public ResponseEntity<Vehicle> saveBike(@PathVariable("userId") Integer userId, @RequestBody Vehicle vehicle){
+        Bike bike = new Bike();
+        bike.setBrand(vehicle.getBrand());
+        bike.setModel(vehicle.getModel());
+
+        Vehicle savedBike = userService.saveBike(userId, bike);
         return ResponseEntity.ok(savedBike);
     }
 
@@ -99,6 +108,7 @@ public class UserController {
     private ResponseEntity<Vehicle> fallBackSaveVehicle(@PathVariable("userId") Integer userId,
                                                         @RequestBody Vehicle vehicle,
                                                         RuntimeException runtimeException){
+        System.err.println("Debugeando ando: " + runtimeException.getMessage());
         return new ResponseEntity("User: " + userId + " can't buy vehicles.", HttpStatus.OK);
     }
 
