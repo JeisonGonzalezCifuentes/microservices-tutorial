@@ -70,17 +70,17 @@ public class UserService {
 
         result.put("User", user);
         List<Car> cars = carFeignClient.getCars(userId);
-        if (cars.isEmpty()){
+        if (cars == null || cars.isEmpty()){
             result.put("Cars", "User does not have cars");
         } else {
             result.put("Cars", cars);
         }
 
         List<Bike> bikes = bikeFeignClient.getBikes(userId);
-        if (bikes.isEmpty()){
-            result.put("Bikes", "User does not have cars");
+        if (bikes == null || bikes.isEmpty()){
+            result.put("Bikes", "User does not have bikes");
         } else {
-            result.put("Bikes", cars);
+            result.put("Bikes", bikes);
         }
 
         return result;
