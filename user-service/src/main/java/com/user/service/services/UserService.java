@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public List<Car> getAllCars(Integer userId){
-        List allCarsByUser = restTemplate.getForObject("http://localhost:8082/car/user/" + userId, List.class);
+        List allCarsByUser = restTemplate.getForObject("http://localhost:8080/car/user/" + userId, List.class);
         return allCarsByUser;
     }
     public Car saveCar(Integer userId, Car car){
@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public List<Bike> getAllBikes(Integer userId){
-        List allBikesByUser = restTemplate.getForObject("http://localhost:8085/bike/user/" + userId, List.class);
+        List allBikesByUser = restTemplate.getForObject("http://localhost:8080/bike/user/" + userId, List.class);
         return allBikesByUser;
     }
 
